@@ -24,32 +24,27 @@ export default function App() {
   }
 
   const { formData, updateField, updateCard, addCard, removeCard, clearAll } = useAdForm(activePlatform, activeFormat)
-
   const currentFormatSpec = platformSpec?.formats[activeFormat]
-  const defaultDevice = currentFormatSpec?.device || 'desktop'
 
   return (
-    <div className="flex h-screen bg-gray-950 text-white overflow-hidden">
+    <div style={{ display: 'flex', height: '100vh', overflow: 'hidden', background: '#f4f2ee', fontFamily: "'DM Sans', sans-serif" }}>
       <Sidebar activePlatform={activePlatform} onSelect={handlePlatformChange} />
 
-      <div className="flex flex-col flex-1 overflow-hidden">
+      <div style={{ display: 'flex', flexDirection: 'column', flex: 1, overflow: 'hidden' }}>
         {/* Top bar */}
-        <div className="flex items-center justify-between px-4 py-2 bg-gray-900 border-b border-gray-800 shrink-0">
-          <div className="flex items-center gap-3">
-            <span className="font-semibold text-white text-sm">{platformSpec?.label}</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <DeviceToggle value={device || defaultDevice} onChange={setDevice} />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '0 20px', height: 56, background: '#fff', borderBottom: '1px solid #e0ddd8', flexShrink: 0 }}>
+          <span style={{ fontSize: 14, fontWeight: 600, color: '#191919' }}>{platformSpec?.label}</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <DeviceToggle value={device} onChange={setDevice} />
             <button
               onClick={() => setDarkMode(d => !d)}
-              title="Toggle dark mode preview"
-              className={`px-3 py-1 rounded-lg text-xs font-medium transition-colors ${darkMode ? 'bg-gray-700 text-yellow-400' : 'bg-gray-800 text-gray-400 hover:text-white'}`}
+              style={{ fontSize: 12, fontWeight: 500, padding: '5px 12px', border: '1px solid #e0ddd8', borderRadius: 8, background: darkMode ? '#e8f0fb' : '#fff', color: darkMode ? '#0a66c2' : '#5e5e5e', cursor: 'pointer' }}
             >
-              {darkMode ? 'Light' : 'Dark'}
+              {darkMode ? '☀ Light preview' : '🌙 Dark preview'}
             </button>
             <button
               onClick={() => setShowExport(true)}
-              className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-semibold px-4 py-1.5 rounded-lg transition-colors"
+              style={{ fontSize: 13, fontWeight: 600, padding: '6px 18px', background: '#0a66c2', color: '#fff', border: 'none', borderRadius: 8, cursor: 'pointer' }}
             >
               Export
             </button>
@@ -59,10 +54,9 @@ export default function App() {
         {/* Format tabs */}
         <FormatTabs formats={platformSpec?.formats || {}} activeFormat={activeFormat} onSelect={setActiveFormat} />
 
-        {/* Main split */}
-        <div className="flex flex-1 overflow-hidden">
-          {/* Left: Form */}
-          <div className="w-72 bg-gray-900 border-r border-gray-800 shrink-0 overflow-y-auto">
+        {/* Split layout */}
+        <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
+          <div style={{ width: 300, flexShrink: 0, overflowY: 'auto', background: '#fff', borderRight: '1px solid #e0ddd8' }}>
             <AdForm
               platform={activePlatform}
               format={activeFormat}
@@ -74,10 +68,8 @@ export default function App() {
               onClear={clearAll}
             />
           </div>
-
-          {/* Right: Preview */}
-          <div className="flex-1 overflow-auto bg-gray-950 flex items-start justify-center p-8">
-            <div ref={previewRef} className="inline-block">
+          <div style={{ flex: 1, overflowY: 'auto', background: '#f4f2ee', display: 'flex', alignItems: 'flex-start', justifyContent: 'center', padding: 40 }}>
+            <div ref={previewRef} style={{ display: 'inline-block' }}>
               <PreviewRenderer
                 platform={activePlatform}
                 format={activeFormat}

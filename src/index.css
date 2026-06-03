@@ -1,3 +1,15 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', -apple-system, sans-serif;
+  background: #f4f2ee;
+  color: #191919;
+}
+
+input, textarea, select, button {
+  font-family: 'DM Sans', -apple-system, sans-serif;
+}

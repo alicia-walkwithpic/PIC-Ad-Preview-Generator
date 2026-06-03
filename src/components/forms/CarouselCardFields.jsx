@@ -1,32 +1,34 @@
-import CharCounter from '../shared/CharCounter'
 import ImageUploader from '../shared/ImageUploader'
+
+const inputStyle = {
+  width: '100%', fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+  padding: '6px 10px', border: '1px solid #e0ddd8', borderRadius: 4,
+  background: '#fafafa', color: '#191919', outline: 'none', marginBottom: 6,
+}
 
 export default function CarouselCardFields({ cards, onUpdateCard, onAddCard, onRemoveCard }) {
   const safeCards = (cards && cards.length >= 2) ? cards : [{ headline: '', description: '', image: null }, { headline: '', description: '', image: null }]
-
   return (
     <div>
       {safeCards.map((card, i) => (
-        <div key={i} className="border border-gray-700 rounded-lg p-3 mb-3">
-          <div className="flex items-center justify-between mb-2">
-            <span className="text-xs font-semibold text-gray-400">Card {i + 1}</span>
-            {safeCards.length > 2 && (
-              <button onClick={() => onRemoveCard(i)} className="text-xs text-red-400 hover:text-red-300">Remove</button>
-            )}
+        <div key={i} style={{ border: '1px solid #e0ddd8', borderRadius: 8, padding: 12, marginBottom: 10, background: '#fafafa' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+            <span style={{ fontSize: 11, fontWeight: 600, color: '#9a9a9a', textTransform: 'uppercase', letterSpacing: '0.06em' }}>Card {i + 1}</span>
+            {safeCards.length > 2 && <button onClick={() => onRemoveCard(i)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: 12, color: '#9a9a9a', fontFamily: "'DM Sans', sans-serif" }}>Remove</button>}
           </div>
-          <div className="mb-2">
-            <label className="block text-xs text-gray-400 mb-1">Headline <CharCounter value={card.headline || ''} max={40} /></label>
-            <input value={card.headline || ''} onChange={e => onUpdateCard(i, 'headline', e.target.value)} className="w-full bg-gray-800 border border-gray-700 text-white rounded px-2 py-1 text-sm" placeholder="Card headline" />
-          </div>
-          <div className="mb-2">
-            <label className="block text-xs text-gray-400 mb-1">Description <CharCounter value={card.description || ''} max={20} /></label>
-            <input value={card.description || ''} onChange={e => onUpdateCard(i, 'description', e.target.value)} className="w-full bg-gray-800 border border-gray-700 text-white rounded px-2 py-1 text-sm" placeholder="Card description" />
-          </div>
+          <label style={{ fontSize: 12, fontWeight: 500, color: '#5e5e5e', display: 'block', marginBottom: 4 }}>Headline</label>
+          <input value={card.headline || ''} onChange={e => onUpdateCard(i, 'headline', e.target.value)} style={inputStyle} placeholder="Card headline" />
+          <label style={{ fontSize: 12, fontWeight: 500, color: '#5e5e5e', display: 'block', marginBottom: 4 }}>Description</label>
+          <input value={card.description || ''} onChange={e => onUpdateCard(i, 'description', e.target.value)} style={inputStyle} placeholder="Card description" />
           <ImageUploader value={card.image} onChange={(v) => onUpdateCard(i, 'image', v)} label="Card Image" aspectRatio="1:1" />
         </div>
       ))}
       {safeCards.length < 10 && (
-        <button onClick={onAddCard} className="w-full border border-dashed border-gray-600 text-gray-400 hover:text-white hover:border-gray-500 rounded-lg py-2 text-sm transition-colors">+ Add Card</button>
+        <button onClick={onAddCard}
+          style={{ width: '100%', border: '2px dashed #e0ddd8', background: 'none', borderRadius: 8, padding: 10, fontSize: 13, fontWeight: 500, color: '#9a9a9a', cursor: 'pointer', fontFamily: "'DM Sans', sans-serif", transition: 'all 0.15s' }}
+          onMouseEnter={e => { e.currentTarget.style.borderColor = '#0a66c2'; e.currentTarget.style.color = '#0a66c2' }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor = '#e0ddd8'; e.currentTarget.style.color = '#9a9a9a' }}
+        >+ Add Card</button>
       )}
     </div>
   )

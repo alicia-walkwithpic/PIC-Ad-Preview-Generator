@@ -1,19 +1,23 @@
 import CharCounter from './CharCounter'
 import ImageUploader from './ImageUploader'
 
+const inputStyle = {
+  width: '100%', fontFamily: "'DM Sans', sans-serif", fontSize: 13,
+  padding: '7px 10px', border: '1px solid #e0ddd8', borderRadius: 4,
+  background: '#fafafa', color: '#191919', outline: 'none', resize: 'none',
+}
+
+const labelStyle = { display: 'block', fontSize: 12, fontWeight: 500, color: '#5e5e5e', marginBottom: 4 }
+
 export default function FieldInput({ fieldKey, spec, value, onChange }) {
   if (spec.type === 'image') {
     return <ImageUploader value={value} onChange={(v) => onChange(fieldKey, v)} label={spec.label} aspectRatio={spec.aspectRatio} />
   }
   if (spec.type === 'select') {
     return (
-      <div className="mb-3">
-        <label className="block text-xs font-medium text-gray-400 mb-1">{spec.label}</label>
-        <select
-          value={value || spec.options[0]}
-          onChange={e => onChange(fieldKey, e.target.value)}
-          className="w-full bg-gray-800 border border-gray-700 text-white rounded px-2 py-1.5 text-sm"
-        >
+      <div style={{ marginBottom: 12 }}>
+        <label style={labelStyle}>{spec.label}</label>
+        <select value={value || spec.options[0]} onChange={e => onChange(fieldKey, e.target.value)} style={inputStyle}>
           {spec.options.map(o => <option key={o}>{o}</option>)}
         </select>
       </div>
@@ -21,63 +25,45 @@ export default function FieldInput({ fieldKey, spec, value, onChange }) {
   }
   if (spec.type === 'textarea') {
     return (
-      <div className="mb-3">
-        <label className="block text-xs font-medium text-gray-400 mb-1">
-          {spec.label} {spec.max && <CharCounter value={value || ''} max={spec.max} />}
-        </label>
-        <textarea
-          value={value || ''}
-          onChange={e => onChange(fieldKey, e.target.value)}
-          rows={3}
-          className="w-full bg-gray-800 border border-gray-700 text-white rounded px-2 py-1.5 text-sm resize-none"
-          placeholder={spec.label}
-        />
+      <div style={{ marginBottom: 12 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+          <label style={{ ...labelStyle, marginBottom: 0 }}>{spec.label}</label>
+          {spec.max && <CharCounter value={value || ''} max={spec.max} />}
+        </div>
+        <textarea value={value || ''} onChange={e => onChange(fieldKey, e.target.value)} rows={3} style={{ ...inputStyle, lineHeight: 1.5, minHeight: 72 }} placeholder={spec.label} />
       </div>
     )
   }
   if (spec.type === 'multi') {
     const items = value || ['', '', '']
     return (
-      <div className="mb-3">
-        <label className="block text-xs font-medium text-gray-400 mb-1">{spec.label} <span className="text-gray-600">(max {spec.count})</span></label>
+      <div style={{ marginBottom: 12 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
+          <label style={{ ...labelStyle, marginBottom: 0 }}>{spec.label}</label>
+          <span style={{ fontSize: 11, color: '#9a9a9a' }}>max {spec.count}</span>
+        </div>
         {items.map((item, i) => (
-          <div key={i} className="flex items-center gap-1 mb-1">
-            <input
-              value={item}
-              onChange={e => {
-                const next = [...items]
-                next[i] = e.target.value
-                onChange(fieldKey, next)
-              }}
-              className="flex-1 bg-gray-800 border border-gray-700 text-white rounded px-2 py-1 text-sm"
-              placeholder={`${spec.label} ${i + 1}`}
-              maxLength={spec.max + 10}
-            />
+          <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 }}>
+            <input value={item} onChange={e => { const next = [...items]; next[i] = e.target.value; onChange(fieldKey, next) }} style={{ ...inputStyle, flex: 1 }} placeholder={`${spec.label} ${i + 1}`} />
             <CharCounter value={item} max={spec.max} />
           </div>
         ))}
         {items.length < spec.count && (
-          <button
-            className="text-xs text-blue-400 hover:text-blue-300 mt-1"
-            onClick={() => onChange(fieldKey, [...items, ''])}
-          >+ Add {spec.label}</button>
+          <button onClick={() => onChange(fieldKey, [...items, ''])} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#0a66c2', fontSize: 12, fontWeight: 500, padding: '4px 0', fontFamily: "'DM Sans', sans-serif", display: 'flex', alignItems: 'center', gap: 4 }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Add {spec.label}
+          </button>
         )}
       </div>
     )
   }
-  // default: text
   return (
-    <div className="mb-3">
-      <label className="block text-xs font-medium text-gray-400 mb-1">
-        {spec.label} {spec.max && <CharCounter value={value || ''} max={spec.max} />}
-      </label>
-      <input
-        value={value || ''}
-        onChange={e => onChange(fieldKey, e.target.value)}
-        className="w-full bg-gray-800 border border-gray-700 text-white rounded px-2 py-1.5 text-sm"
-        placeholder={spec.label}
-        maxLength={spec.max ? spec.max + 10 : undefined}
-      />
+    <div style={{ marginBottom: 12 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+        <label style={{ ...labelStyle, marginBottom: 0 }}>{spec.label}</label>
+        {spec.max && <CharCounter value={value || ''} max={spec.max} />}
+      </div>
+      <input value={value || ''} onChange={e => onChange(fieldKey, e.target.value)} style={inputStyle} placeholder={spec.label} />
     </div>
   )
 }

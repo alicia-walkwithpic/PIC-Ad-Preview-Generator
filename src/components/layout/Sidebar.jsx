@@ -9,16 +9,22 @@ const platforms = [
 
 export default function Sidebar({ activePlatform, onSelect }) {
   return (
-    <div className="w-16 bg-gray-900 border-r border-gray-800 flex flex-col items-center py-4 gap-2 shrink-0">
-      <div className="mb-4 text-center px-1">
-        <span className="text-white font-bold text-xs tracking-widest">PIC</span>
+    <div style={{ width: 60, background: '#fff', borderRight: '1px solid #e0ddd8', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '16px 0', gap: 6, flexShrink: 0 }}>
+      <div style={{ marginBottom: 12 }}>
+        <span style={{ fontSize: 10, fontWeight: 700, color: '#0a66c2', letterSpacing: 2, textTransform: 'uppercase' }}>PIC</span>
       </div>
       {platforms.map(p => (
         <button
           key={p.key}
           onClick={() => onSelect(p.key)}
           title={p.label}
-          className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${activePlatform === p.key ? 'bg-gray-700 ring-2 ring-blue-500' : 'hover:bg-gray-800'}`}
+          style={{
+            width: 40, height: 40, borderRadius: 10,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            border: activePlatform === p.key ? '1.5px solid #0a66c2' : '1.5px solid transparent',
+            background: activePlatform === p.key ? '#e8f0fb' : 'transparent',
+            cursor: 'pointer', transition: 'all 0.15s'
+          }}
         >
           <PlatformLogo platform={p.key} size={22} />
         </button>
